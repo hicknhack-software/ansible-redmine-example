@@ -1,0 +1,8 @@
+[vagrant]
+redmine-vm
+
+[redmine_app:children]
+vagrant
+
+[app:children]
+vagrant

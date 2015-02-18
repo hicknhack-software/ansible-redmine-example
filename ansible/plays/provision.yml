@@ -1,0 +1,48 @@
+---
+- name: Provisioning Redmine
+  hosts: app
+  sudo: yes
+  roles:
+  - dresden-weekly.Rails/postgresql
+
+  - role: debops.users
+    users_list:
+    - name: "{{ app_user }}"
+      comment: "Redmine Application"
+      sshkeys:
+      - "{{ lookup('file', '../id_rsa.pub') }}"
+
+  - role: dresden-weekly.Rails/user/profile
+    rails_user_name: "{{ app_user }}"
+    rails_user_bashrc_lines:
+      - "cd {{ app_path }} || true"
+      - "cd {{ app_path }}/current || true"
+    rails_user_env:
+      SECRET_KEY_BASE: "{{ app_secret_key_base }}"
+      RAILS_LOG_FILE_PATH: "{{ app_path }}/shared/log/"
+      DATABASE_URL: "{{ DATABASE_URL }}"
+
+  - dresden-weekly.Rails/ruby/rvm
+  - dresden-weekly.Rails/ruby/postgresql
+
+  - dresden-weekly.Rails/rails/create-folders
+  - dresden-weekly.Rails/rails/logrotate
+
+  - dresden-weekly.Rails/apache/server
+  - role: dresden-weekly.Rails/apache/passenger
+    apache_site_options:
+      PassengerRuby: '/home/{{ app_user }}/.rvm/gems/ruby-{{ ruby_version }}/wrappers/ruby'
+
+  post_tasks:
+  - name: create redmine link
+    file:
+      path: "{{ site_path }}"
+      src: "{{ app_path }}/current/public"
+      state: link
+      force: yes
+
+- include: deploy.yml
+  sudo: yes
+  sudo_user: "{{ app_user }}"
+  vars:
+    provisioned: yes

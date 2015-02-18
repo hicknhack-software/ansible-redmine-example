@@ -1,0 +1,54 @@
+---
+- name: deploying Redmine
+  hosts:
+  - app
+  sudo: yes
+  sudo_user: '{{ app_user }}'
+  remote_user: '{{ app_user }}'
+
+  vars:
+    ruby_bin: '~/.rvm/bin/rvm default do '
+    profile: '/bin/bash -lc -- '
+    was_provisioned: "{{ provisioned | default(false) }}"
+
+  pre_tasks:
+  - name: Check previous deploy
+    stat:
+      path: "{{ app_path }}/current"
+    register: deploy_current
+
+  - set_fact:
+      not_provisioned: "{{ not (was_provisioned | bool) }}"
+      is_first_deploy: "{{ not deploy_current.stat.exists }}"
+
+  - set_fact:
+      run_deploy: >
+        {{   (is_first_deploy | bool)
+          or (not_provisioned | bool)
+        }}
+
+  roles:
+  - role: dresden-weekly.Rails/rails/create-release
+    rails_release_id: "{{ rails_release_id_git_branch }}"
+    rails_deploy_archive: "{{ redmine_deploy_archive }}"
+    rails_deploy_shared_folders: "{{ redmine_deploy_shared_folders }}"
+    when: run_deploy | bool
+
+  - role: hicknhack-software.Redmine/config
+    when: run_deploy | bool
+
+  - role: dresden-weekly.Rails/rails/tasks/bundle
+    bundle_without: "{{ redmine_bundle_without }}"
+    when: run_deploy | bool
+
+  - role: dresden-weekly.Rails/rails/tasks/migrate-database
+    when: run_deploy | bool
+
+  - role: hicknhack-software.Redmine/default-data
+    when: run_deploy | bool
+
+  - role: dresden-weekly.Rails/rails/update-current
+    when: run_deploy | bool
+
+  - role: dresden-weekly.Rails/rails/cleanup-old-releases
+    when: run_deploy | bool

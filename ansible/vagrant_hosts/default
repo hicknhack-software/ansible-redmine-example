@@ -1,0 +1,11 @@
+[vagrant]
+localhost
+
+[vagrant:vars]
+ansible_connection=local
+
+[redmine_app:children]
+vagrant
+
+[app:children]
+vagrant

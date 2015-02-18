@@ -1,0 +1,11 @@
+[vagrant]
+redmine-vm
+
+[vagrant:vars]
+ansible_ssh_user=vagrant
+
+[redmine_app:children]
+vagrant
+
+[app:children]
+vagrant

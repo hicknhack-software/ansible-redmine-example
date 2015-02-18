@@ -1,0 +1,21 @@
+---
+# stable version from Ansible Galaxy
+# - src: "dresden-weekly.Rails"
+#   version: "0.2"
+
+# development version from Github
+- src: "https://github.com/dresden-weekly/ansible-rails"
+  version: "develop"
+  name: "dresden-weekly.Rails"
+
+# stable version from Ansible Galaxy
+# - src: "hicknhack-software.redmine"
+#   version: "0.1"
+
+# development version from Github
+- src: "https://github.com/hicknhack-software/ansible-redmine"
+  version: "develop"
+  name: "hicknhack-software.redmine"
+
+- src: "debops.users"
+  version: "v0.1.0"
