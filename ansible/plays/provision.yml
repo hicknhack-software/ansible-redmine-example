@@ -33,6 +33,8 @@
     apache_site_options:
       PassengerRuby: '/home/{{ app_user }}/.rvm/gems/ruby-{{ ruby_version }}/wrappers/ruby'
 
+  - hicknhack-software.redmine/rmagick
+
   post_tasks:
   - name: create redmine link
     file:

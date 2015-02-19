@@ -27,7 +27,7 @@ Basic Usage
 Advanced Usage
 --------------
 
-These examples are meant as starting points for your own projects.
+This example is meant as a starting points for your own projects.
 Feel free to combine your roles with ours.
 
 **Please consider open sourcing generic roles or ideas**

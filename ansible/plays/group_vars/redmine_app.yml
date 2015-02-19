@@ -23,6 +23,8 @@ db_user: redmine
 db_password: redmine
 db_name: redmine
 
+redmine_admin_password: 'Ch4n53M3'
+
 redmine_deploy_archive:
 - app
 - config
@@ -32,7 +34,8 @@ redmine_deploy_archive:
 - lib
 - public
 - Rakefile
-- plugins
+- script # Rails 3 support
+- plugins # added
 # no vendor!
 
 redmine_deploy_shared_folders: # default folders that are shared between releases
@@ -40,12 +43,5 @@ redmine_deploy_shared_folders: # default folders that are shared between release
 - bundle
 - log
 - tmp
+- files # added
 # no public/assets
-
-redmine_bundle_without:
-- development
-- test
-#- openid
-#- ldap
-- rmagick
-- markdown
