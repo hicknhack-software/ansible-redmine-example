@@ -8,6 +8,8 @@
   - role: debops.users
     users_list:
     - name: "{{ app_user }}"
+      groups:
+      - 'www-data'
       comment: "Redmine Application"
       sshkeys:
       - "{{ lookup('file', '../id_rsa.pub') }}"
@@ -34,6 +36,18 @@
       PassengerRuby: '/home/{{ app_user }}/.rvm/gems/ruby-{{ ruby_version }}/wrappers/ruby'
 
   - hicknhack-software.redmine/rmagick
+
+  - role: hicknhack-software.redmine/apache/auth
+    tags:
+    - redmine_auth
+
+  - role: hicknhack-software.redmine/apache/git
+    tags:
+    - redmine_auth
+
+  - role: hicknhack-software.redmine/apache/subversion
+    tags:
+    - redmine_auth
 
   post_tasks:
   - name: create redmine link
