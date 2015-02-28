@@ -14,26 +14,26 @@
       sshkeys:
       - "{{ lookup('file', '../id_rsa.pub') }}"
 
+  - dresden-weekly.Rails/ruby/rvm
+  - dresden-weekly.Rails/ruby/postgresql
+  - dresden-weekly.Rails/ruby/sqlite3
+
+  - dresden-weekly.Rails/rails/folders
+  - dresden-weekly.Rails/rails/logrotate
+
   - role: dresden-weekly.Rails/user/profile
     rails_user_name: "{{ app_user }}"
     rails_user_bashrc_lines:
-      - "cd {{ app_path }} || true"
-      - "cd {{ app_path }}/current || true"
+      - "cd {{ RAILS_APP_BASE_PATH }} || true"
+      - "cd {{ RAILS_APP_CURRENT_PATH }} || true"
     rails_user_env:
+      RAILS_ENV: "{{ rails_env }}"
       SECRET_KEY_BASE: "{{ app_secret_key_base }}"
-      RAILS_LOG_FILE_PATH: "{{ app_path }}/shared/log/"
+      RAILS_LOG_FILE_PATH: "{{ RAILS_APP_LOG_PATH }}"
       DATABASE_URL: "{{ DATABASE_URL }}"
 
-  - dresden-weekly.Rails/ruby/rvm
-  - dresden-weekly.Rails/ruby/postgresql
-
-  - dresden-weekly.Rails/rails/create-folders
-  - dresden-weekly.Rails/rails/logrotate
-
   - dresden-weekly.Rails/apache/server
-  - role: dresden-weekly.Rails/apache/passenger
-    apache_site_options:
-      PassengerRuby: '/home/{{ app_user }}/.rvm/gems/ruby-{{ ruby_version }}/wrappers/ruby'
+  - dresden-weekly.Rails/apache/passenger
 
   - hicknhack-software.redmine/rmagick
 
@@ -53,7 +53,7 @@
   - name: create redmine link
     file:
       path: "{{ site_path }}"
-      src: "{{ app_path }}/current/public"
+      src: "{{ RAILS_APP_CURRENT_PUBLIC_PATH }}"
       state: link
       force: yes
 

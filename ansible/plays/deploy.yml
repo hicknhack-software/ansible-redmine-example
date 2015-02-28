@@ -7,10 +7,11 @@
   remote_user: '{{ app_user }}'
 
   vars:
-    ruby_bin: '~/.rvm/bin/rvm default do '
     profile: '/bin/bash -lc -- '
 
   roles:
+  - dresden-weekly.Rails/rails/folders
+
   - role: dresden-weekly.Rails/rails/create-release
     rails_release_id: "{{ rails_release_id_git_branch }}"
     rails_deploy_archive: "{{ redmine_deploy_archive }}"
@@ -33,6 +34,10 @@
     - plugins
     - periodictask
 
+  - role: hicknhack-software.Redmine/theme
+    tags:
+    - theme
+
   - role: dresden-weekly.Rails/rails/tasks/bundle
     tags:
     - finish
@@ -42,6 +47,10 @@
     - finish
 
   - hicknhack-software.Redmine/default-data
+
+  - role: hicknhack-software.Redmine/plugin/migrate-database
+    tags:
+    - finish
 
   - role: dresden-weekly.Rails/rails/update-current
     tags:
