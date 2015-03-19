@@ -19,3 +19,6 @@
 
 - src: "debops.users"
   version: "v0.1.0"
+
+- src: "ANXS.mysql"
+  version: "v1.0.3"

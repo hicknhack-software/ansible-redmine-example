@@ -2,8 +2,28 @@
 - name: Provisioning Redmine
   hosts: app
   sudo: yes
+
+  pre_tasks:
+  # begin MYSQL specific
+  - name: Connection URL
+    set_fact:
+      DATABASE_URL: "mysql://{{ db_user }}:{{ db_password }}@127.0.0.1:3306/{{ db_name }}"
+  # end MYSQL specific
+
   roles:
-  - dresden-weekly.Rails/postgresql
+  #- dresden-weekly.Rails/postgresql # POSTGRESQL specific
+
+  # begin MYSQL specific
+  - role: ANXS.mysql
+    mysql_bind_address: '127.0.0.1'
+    mysql_root_password: 'mysql'
+    mysql_databases:
+    - name: '{{ db_name }}'
+    mysql_users:
+    - name: '{{ db_user }}'
+      pass: '{{ db_password }}'
+      priv: '{{ db_name }}.*:ALL'
+  # end MYSQL specific
 
   - role: debops.users
     users_list:
@@ -15,7 +35,8 @@
       - "{{ lookup('file', '../id_rsa.pub') }}"
 
   - dresden-weekly.Rails/ruby/rvm
-  - dresden-weekly.Rails/ruby/postgresql
+  #- dresden-weekly.Rails/ruby/postgresql # POSTGRESQL specific
+  - dresden-weekly.Rails/ruby/mysql # MYSQL specific
   - dresden-weekly.Rails/ruby/sqlite3
 
   - dresden-weekly.Rails/rails/folders
