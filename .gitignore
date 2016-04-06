@@ -2,3 +2,4 @@
 ansible/.roles/
 ansible/roles/
 ansible/id_rsa.pub
+.vagrant-file.rb
