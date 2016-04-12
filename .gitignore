@@ -2,3 +2,5 @@
 ansible/.roles/
 ansible/roles/
 ansible/id_rsa.pub
+*.retry
+*.log
