@@ -18,14 +18,14 @@
   #- dresden-weekly.Rails/postgresql # POSTGRESQL specific
 
   # begin MYSQL specific
-  - role: ANXS.mysql
+  - role: geerlingguy.mysql
     mysql_bind_address: "127.0.0.1"
     mysql_root_password: "mysql"
     mysql_databases:
     - name: "{{ db_name }}"
     mysql_users:
     - name: "{{ db_user }}"
-      pass: "{{ db_password }}"
+      password: "{{ db_password }}"
       priv: "{{ db_name }}.*:ALL"
   # end MYSQL specific
 
