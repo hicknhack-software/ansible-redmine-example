@@ -1,7 +1,7 @@
 ---
 - name: Provisioning Redmine
   hosts: app
-  sudo: yes
+  become: yes
 
   pre_tasks:
   # begin MYSQL specific
@@ -10,29 +10,24 @@
       DATABASE_URL: "mysql://{{ db_user }}:{{ db_password }}@127.0.0.1:3306/{{ db_name }}"
   # end MYSQL specific
 
+  - user:
+      name: "{{ app_user }}"
+      groups: "www-data"
+
   roles:
   #- dresden-weekly.Rails/postgresql # POSTGRESQL specific
 
   # begin MYSQL specific
   - role: ANXS.mysql
-    mysql_bind_address: '127.0.0.1'
-    mysql_root_password: 'mysql'
+    mysql_bind_address: "127.0.0.1"
+    mysql_root_password: "mysql"
     mysql_databases:
-    - name: '{{ db_name }}'
+    - name: "{{ db_name }}"
     mysql_users:
-    - name: '{{ db_user }}'
-      pass: '{{ db_password }}'
-      priv: '{{ db_name }}.*:ALL'
+    - name: "{{ db_user }}"
+      pass: "{{ db_password }}"
+      priv: "{{ db_name }}.*:ALL"
   # end MYSQL specific
-
-  - role: debops.users
-    users_list:
-    - name: "{{ app_user }}"
-      groups:
-      - 'www-data'
-      comment: "Redmine Application"
-      sshkeys:
-      - "{{ lookup('file', '../id_rsa.pub') }}"
 
   - dresden-weekly.Rails/ruby/rvm
   #- dresden-weekly.Rails/ruby/postgresql # POSTGRESQL specific
@@ -79,7 +74,5 @@
       force: yes
 
 - include: deploy.yml
-  sudo: yes
-  sudo_user: "{{ app_user }}"
   vars:
     provisioned: yes
