@@ -47,5 +47,10 @@ redmine_deploy_shared_folders: # default folders that are shared between release
 # no public/assets
 
 apache_server_mpm: prefork # required for SVN and Git hosting
+
 apache_site_options:
   PassengerRuby: "{{ RUBY_BIN }}"
+
+apache_set_env:
+  DATABASE_URL: "{{ DATABASE_URL }}"
+  SECRET_KEY_BASE: "{{ app_secret_key_base }}"
