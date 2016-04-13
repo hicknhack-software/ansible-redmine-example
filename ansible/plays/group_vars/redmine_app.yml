@@ -4,13 +4,13 @@ app_user: deploy
 app_path: /opt/redmine
 
 site_id: redmine
-site_url_path: '/redmine'
+site_url_path: "/redmine"
 
-apache_vhost_document_root: '/var/www'
-site_path: '{{ apache_vhost_document_root }}{{ site_url_path }}'
+apache_vhost_document_root: "/var/www"
+site_path: "{{ apache_vhost_document_root }}{{ site_url_path }}"
 
-git_user: '' # "{{ lookup('env', 'REPO_USER') | default('deploy', true) }}"
-git_passphrase: '' # "{{ lookup('env', 'REPO_PASSWORD') | default('missing', true) }}"
+git_user: "" # "{{ lookup('env', 'REPO_USER') | default('deploy', true) }}"
+git_passphrase: "" # "{{ lookup('env', 'REPO_PASSWORD') | default('missing', true) }}"
 git_url: "https://github.com/redmine/redmine.git"
 git_branch: 2.6.2 # 2.6-stable
 
@@ -23,7 +23,7 @@ db_user: redmine
 db_password: redmine
 db_name: redmine
 
-redmine_admin_password: 'Ch4n53M3'
+redmine_admin_password: "Ch4n53M3"
 
 redmine_deploy_archive:
 - app
@@ -47,5 +47,10 @@ redmine_deploy_shared_folders: # default folders that are shared between release
 # no public/assets
 
 apache_server_mpm: prefork # required for SVN and Git hosting
+
 apache_site_options:
-  PassengerRuby: '{{ RUBY_BIN }}'
+  PassengerRuby: "{{ RUBY_BIN }}"
+
+apache_set_env:
+  DATABASE_URL: "{{ DATABASE_URL }}"
+  SECRET_KEY_BASE: "{{ app_secret_key_base }}"

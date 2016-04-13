@@ -2,12 +2,12 @@
 - name: deploying Redmine
   hosts:
   - app
-  sudo: yes
-  sudo_user: '{{ app_user }}'
-  remote_user: '{{ app_user }}'
+  become: yes
+  become_user: "{{ app_user }}"
+  remote_user: "{{ app_user }}"
 
   vars:
-    profile: '/bin/bash -lc -- '
+    profile: "/bin/bash -lc -- "
 
   roles:
   - dresden-weekly.Rails/rails/folders
