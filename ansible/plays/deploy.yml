@@ -2,7 +2,7 @@
 - name: deploying Redmine
   hosts:
   - app
-  become: yes
+  become: true
   become_user: "{{ app_user }}"
   remote_user: "{{ app_user }}"
 

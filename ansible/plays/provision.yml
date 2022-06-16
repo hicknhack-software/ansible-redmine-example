@@ -1,7 +1,7 @@
 ---
 - name: Provisioning Redmine
   hosts: app
-  become: yes
+  become: true
 
   pre_tasks:
   # begin MYSQL specific
